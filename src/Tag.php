@@ -39,6 +39,11 @@ class Tag extends Model
     public $antenaId;
 
     /**
+     * @var string
+     */
+    public $userData;
+
+    /**
      * @var int
      */
     public $createdAt;
@@ -47,4 +52,39 @@ class Tag extends Model
      * @var int
      */
     public $updatedAt;
+
+    /**
+     * Get decoded EPC id
+     *
+     * @return string
+     */
+    public function getDecodedEpc(): string
+    {
+        return $this->hex2str($this->epcId);
+    }
+
+    /**
+     * Get decoded user data
+     *
+     * @return string
+     */
+    public function getDecodedUserData(): string
+    {
+        return $this->hex2str($this->userData);
+    }
+
+    /**
+     * Convert HEX to ASCII
+     *
+     * @param string $hex
+     *
+     * @return string
+     */
+    private function hex2str($hex): string
+    {
+        $str = '';
+        for ($i = 0; $i < strlen($hex); $i += 2) $str .= chr(hexdec(substr($hex, $i, 2)));
+
+        return $str;
+    }
 }

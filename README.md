@@ -1,5 +1,7 @@
 # yii2-rfid-reader
-Extension provide library for Rfid Reader
+Extension provide library for Rfid Reader Java API lib
+
+***WARNING***: need special Java library
 
 Installation
 ------------
