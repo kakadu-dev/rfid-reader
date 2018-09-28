@@ -29,6 +29,17 @@ class ApiResponse extends Model
     private $_message;
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return json_encode([
+            'status'  => $this->_status,
+            'message' => $this->_message,
+        ]);
+    }
+
+    /**
      * If response status has true
      *
      * @return bool
