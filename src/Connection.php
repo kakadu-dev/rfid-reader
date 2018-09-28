@@ -141,4 +141,76 @@ class Connection extends Component
 
         return $reader;
     }
+
+    /**
+     * Get reeader error message
+     *
+     * @return null|string
+     */
+    public function getErrorMessage(): ?string
+    {
+        try {
+            $response = $this->createRequest()
+                ->setUrl('/reader/error-message')
+                ->setMethod('GET')
+                ->send();
+
+            if ($response->isOk) {
+                return $response->data['errorMessage'] ?? NULL;
+            }
+        } catch (\Exception $e) {
+        }
+
+        return NULL;
+    }
+
+    /**
+     * Restart inventory
+     *
+     * @return ApiResponse
+     */
+    public function inventoryRestart(): ApiResponse
+    {
+        $apiResponse = new ApiResponse();
+
+        try {
+            $response = $this->createRequest()
+                ->setUrl('/reader/inventory-restart')
+                ->setMethod('POST')
+                ->send();
+
+            if ($response->isOk) {
+                $apiResponse->setMessage($response->data['errorMessage'] ?? NULL);
+                $apiResponse->setStatus($response->data['status'] ?? false);
+            }
+        } catch (\Exception $e) {
+        }
+
+        return $apiResponse;
+    }
+
+    /**
+     * Restart connection
+     *
+     * @return ApiResponse
+     */
+    public function connectionRestart(): ApiResponse
+    {
+        $apiResponse = new ApiResponse();
+
+        try {
+            $response = $this->createRequest()
+                ->setUrl('/reader/connection-restart')
+                ->setMethod('POST')
+                ->send();
+
+            if ($response->isOk) {
+                $apiResponse->setMessage($response->data['errorMessage'] ?? NULL);
+                $apiResponse->setStatus($response->data['status'] ?? false);
+            }
+        } catch (\Exception $e) {
+        }
+
+        return $apiResponse;
+    }
 }
