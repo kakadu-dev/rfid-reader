@@ -21,7 +21,7 @@ class ApiResponse extends Model
     /**
      * @var bool
      */
-    private $_status;
+    private $_status = false;
 
     /**
      * @var string|null
