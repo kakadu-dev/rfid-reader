@@ -213,4 +213,29 @@ class Connection extends Component
 
         return $apiResponse;
     }
+
+    /**
+     * Disconnect from reader
+     *
+     * @return ApiResponse
+     */
+    public function disconnect(): ApiResponse
+    {
+        $apiResponse = new ApiResponse();
+
+        try {
+            $response = $this->createRequest()
+                ->setUrl('/reader/connection-stop')
+                ->setMethod('POST')
+                ->send();
+
+            if ($response->isOk) {
+                $apiResponse->setMessage($response->data['errorMessage'] ?? NULL);
+                $apiResponse->setStatus($response->data['status'] ?? false);
+            }
+        } catch (\Exception $e) {
+        }
+
+        return $apiResponse;
+    }
 }
