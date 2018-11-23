@@ -126,6 +126,8 @@ class Connection extends Component
     {
         $reader = new Reader();
 
+        $reader->setConnection($this);
+
         try {
             $response = $this->createRequest()
                 ->setUrl('/reader/status')
@@ -135,7 +137,6 @@ class Connection extends Component
             if ($response->isOk) {
                 $reader->setInventoryStatus((bool) $response->data['inventory'] ?? false);
                 $reader->setReaderStatus((bool) $response->data['reader'] ?? false);
-                $reader->setConnection($this);
             }
         } catch (\Exception $e) {
         }
