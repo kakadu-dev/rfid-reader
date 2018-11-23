@@ -29,6 +29,11 @@ class Reader extends Model
     private $inventoryStatus = false;
 
     /**
+     * @var Connection
+     */
+    private $_connection;
+
+    /**
      * @return bool
      */
     public function isInventoryStatus(): bool
@@ -58,5 +63,21 @@ class Reader extends Model
     public function setReaderStatus(bool $readerStatus): void
     {
         $this->readerStatus = $readerStatus;
+    }
+
+    /**
+     * @param Connection $connection
+     */
+    public function setConnection(Connection $connection): void
+    {
+        $this->_connection = $connection;
+    }
+
+    /**
+     * @return Connection
+     */
+    public function getConnection(): Connection
+    {
+        return $this->_connection;
     }
 }
