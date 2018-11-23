@@ -63,6 +63,7 @@ class Connection extends Component
         return $this->_client->createRequest()
             ->setOptions([
                 'userAgent' => 'Kakadu Http Client 1.0',
+                'timeout'   => 10,
             ]);
     }
 
