@@ -29,6 +29,36 @@ class Reader extends Model
     private $inventoryStatus = false;
 
     /**
+     * @var int
+     */
+    private $tagsCount = 0;
+
+    /**
+     * @var int
+     */
+    private $synMessageQueue = 0;
+
+    /**
+     * @var int
+     */
+    private $protocolDecoderOutputQueue = 0;
+
+    /**
+     * @var int
+     */
+    private $executorFilterQueue = 0;
+
+    /**
+     * @var int
+     */
+    private $connectionAttemptEventQueue = 0;
+
+    /**
+     * @var null|string
+     */
+    private $errorMessage;
+
+    /**
      * @var Connection
      */
     private $_connection;
@@ -79,5 +109,101 @@ class Reader extends Model
     public function getConnection(): Connection
     {
         return $this->_connection;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTagsCount(): int
+    {
+        return $this->tagsCount;
+    }
+
+    /**
+     * @param int $tagsCount
+     */
+    public function setTagsCount(int $tagsCount): void
+    {
+        $this->tagsCount = $tagsCount;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSynMessageQueue(): int
+    {
+        return $this->synMessageQueue;
+    }
+
+    /**
+     * @param int $synMessageQueue
+     */
+    public function setSynMessageQueue(int $synMessageQueue): void
+    {
+        $this->synMessageQueue = $synMessageQueue;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProtocolDecoderOutputQueue(): int
+    {
+        return $this->protocolDecoderOutputQueue;
+    }
+
+    /**
+     * @param int $protocolDecoderOutputQueue
+     */
+    public function setProtocolDecoderOutputQueue(int $protocolDecoderOutputQueue): void
+    {
+        $this->protocolDecoderOutputQueue = $protocolDecoderOutputQueue;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExecutorFilterQueue(): int
+    {
+        return $this->executorFilterQueue;
+    }
+
+    /**
+     * @param int $executorFilterQueue
+     */
+    public function setExecutorFilterQueue(int $executorFilterQueue): void
+    {
+        $this->executorFilterQueue = $executorFilterQueue;
+    }
+
+    /**
+     * @return int
+     */
+    public function getConnectionAttemptEventQueue(): int
+    {
+        return $this->connectionAttemptEventQueue;
+    }
+
+    /**
+     * @param int $connectionAttemptEventQueue
+     */
+    public function setConnectionAttemptEventQueue(int $connectionAttemptEventQueue): void
+    {
+        $this->connectionAttemptEventQueue = $connectionAttemptEventQueue;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getErrorMessage(): ?string
+    {
+        return $this->errorMessage;
+    }
+
+    /**
+     * @param null|string $errorMessage
+     */
+    public function setErrorMessage(?string $errorMessage): void
+    {
+        $this->errorMessage = $errorMessage;
     }
 }

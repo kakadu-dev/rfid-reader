@@ -97,6 +97,41 @@ class Connection extends Component
     }
 
     /**
+     * Get rfid tags and queue size
+     *
+     * @return array
+     */
+    public function getTagsAndQueue(): array
+    {
+        try {
+            $response = $this->createRequest()
+                ->setUrl('/tags/list-wait-tags')
+                ->setMethod('GET')
+                ->send();
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        $tags      = [];
+        $queueSize = 0;
+
+        if ($response->isOk) {
+            $queueSize = (int) ($response->data['queue'] ?? 0);
+
+            foreach ($response->data['tags'] as $tag) {
+                if (!empty($tag['epcId'])) {
+                    $tags[] = new Tag($tag);
+                }
+            }
+        }
+
+        return [
+            'queueSize' => $queueSize,
+            'tags'      => $tags,
+        ];
+    }
+
+    /**
      * Delete tags (clear read list)
      *
      * @return bool
@@ -138,33 +173,17 @@ class Connection extends Component
             if ($response->isOk) {
                 $reader->setInventoryStatus((bool) $response->data['inventory'] ?? false);
                 $reader->setReaderStatus((bool) $response->data['reader'] ?? false);
+                $reader->setTagsCount((int) $response->data['tagsCount'] ?? 0);
+                $reader->setSynMessageQueue((int) $response->data['SynMessageQueue'] ?? 0);
+                $reader->setProtocolDecoderOutputQueue((int) $response->data['ProtocolDecoderOutputQueue'] ?? 0);
+                $reader->setExecutorFilterQueue((int) $response->data['ExecutorFilterQueue'] ?? 0);
+                $reader->setConnectionAttemptEventQueue((int) $response->data['ConnectionAttemptEventQueue'] ?? 0);
+                $reader->setErrorMessage($response->data['errorMessage'] ?? null);
             }
         } catch (\Exception $e) {
         }
 
         return $reader;
-    }
-
-    /**
-     * Get reeader error message
-     *
-     * @return null|string
-     */
-    public function getErrorMessage(): ?string
-    {
-        try {
-            $response = $this->createRequest()
-                ->setUrl('/reader/error-message')
-                ->setMethod('GET')
-                ->send();
-
-            if ($response->isOk) {
-                return $response->data['errorMessage'] ?? NULL;
-            }
-        } catch (\Exception $e) {
-        }
-
-        return NULL;
     }
 
     /**
@@ -183,7 +202,32 @@ class Connection extends Component
                 ->send();
 
             if ($response->isOk) {
-                $apiResponse->setMessage($response->data['errorMessage'] ?? NULL);
+                $apiResponse->setMessage($response->data['errorMessage'] ?? null);
+                $apiResponse->setStatus($response->data['status'] ?? false);
+            }
+        } catch (\Exception $e) {
+        }
+
+        return $apiResponse;
+    }
+
+    /**
+     * Stop inventory
+     *
+     * @return ApiResponse
+     */
+    public function inventoryStop(): ApiResponse
+    {
+        $apiResponse = new ApiResponse();
+
+        try {
+            $response = $this->createRequest()
+                ->setUrl('/reader/inventory-stop')
+                ->setMethod('POST')
+                ->send();
+
+            if ($response->isOk) {
+                $apiResponse->setMessage($response->data['errorMessage'] ?? null);
                 $apiResponse->setStatus($response->data['status'] ?? false);
             }
         } catch (\Exception $e) {
@@ -208,7 +252,7 @@ class Connection extends Component
                 ->send();
 
             if ($response->isOk) {
-                $apiResponse->setMessage($response->data['errorMessage'] ?? NULL);
+                $apiResponse->setMessage($response->data['errorMessage'] ?? null);
                 $apiResponse->setStatus($response->data['status'] ?? false);
             }
         } catch (\Exception $e) {
@@ -233,7 +277,7 @@ class Connection extends Component
                 ->send();
 
             if ($response->isOk) {
-                $apiResponse->setMessage($response->data['errorMessage'] ?? NULL);
+                $apiResponse->setMessage($response->data['errorMessage'] ?? null);
                 $apiResponse->setStatus($response->data['status'] ?? false);
             }
         } catch (\Exception $e) {
@@ -241,4 +285,6 @@ class Connection extends Component
 
         return $apiResponse;
     }
+
+
 }
